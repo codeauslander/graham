@@ -11,30 +11,34 @@ class Graph
     def initialize(edges)
         raise 'At least one edge is necessary' unless edges[0]
         @edges = edges
-        @nodes = create_nodes(edges)
+        @nodes = []
+        create_nodes
     end
 
-    def create_nodes(edges)
-        nodes = []
-
-        edges.each do |edge|
-
-            start_node = nodes.select { |node| edge[0] === node.number}[0] || Node.new(edge[0])
-            end_node = nodes.select { |node| edge[1] === node.number}[0] || Node.new(edge[1])
-
-            end_node.connections << start_node unless end_node.connections.detect { |node| start_node.number === node.number}
-            end_node.connections << end_node unless end_node.connections.detect { |node| end_node.number === node.number}
-
-            start_node.connections << end_node unless start_node.connections.detect { |node| end_node.number === node.number}
-            start_node.connections << start_node unless start_node.connections.detect { |node| start_node.number === node.number}
-            
-            
-            nodes << start_node unless nodes.detect { |node| edge[0] === node.number}
-            nodes << end_node unless nodes.detect { |node| edge[1] === node.number}
-            
+    def create_nodes
+        @edges.each do |edge|
+            add_node(edge)
         end
+    end
 
-        nodes
+    def add_node(edge)
+        start_node = @nodes.select { |node| edge[0] === node.number}[0] || Node.new(edge[0])
+        end_node = @nodes.select { |node| edge[1] === node.number}[0] || Node.new(edge[1])
+
+        end_node.connections << start_node unless end_node.connections.detect { |node| start_node.number === node.number}
+        end_node.connections << end_node unless end_node.connections.detect { |node| end_node.number === node.number}
+
+        start_node.connections << end_node unless start_node.connections.detect { |node| end_node.number === node.number}
+        start_node.connections << start_node unless start_node.connections.detect { |node| start_node.number === node.number}
+        
+        @nodes << start_node unless @nodes.detect { |node| edge[0] === node.number}
+        @nodes << end_node unless @nodes.detect { |node| edge[1] === node.number}
+    end
+
+    def add_edge(start_edge, end_edge)
+        edge = [start_edge, end_edge]
+        @edges << [edge]
+        add_node(edge)
     end
 
     def intersections
@@ -71,46 +75,41 @@ class Graph
 
 end
 
-puts
-puts 
-puts 
+# puts
+# # a count_graphs 2
+# # (1, 2) (2, 3) (3, 1) (4, 5)
+# edges_a = [[1, 2], [2, 3], [3, 1], [4, 5] ] 
+# group_a = Graph.new(edges_a)
+# puts "Number of grahps for group A is " + group_a.count_graphs.to_s
+# puts
+# group_a.print_nodes
+# puts
+# puts "interceptions for group A"
+# p group_a.intersections
 
-# a count_graphs 2
-edges_a = [[1, 2], [2, 3], [3, 1], [4, 6], [5,7]] 
+# puts
+# # b count_graphs 1
+# edges_b = [[1, 2], [2, 3], [3, 1], [4, 5], [4, 1], [7,1]]
+# group_b = Graph.new(edges_b)
+# puts "Number of grahps for group B is " + group_b.count_graphs.to_s
+# puts
+# group_b.print_nodes
+# puts
+# puts
+# puts "interceptions for group B"
+# p group_b.intersections
 
-# b count_graphs 1
-edges_b = [[1, 2], [2, 3], [3, 1], [4, 5], [4, 1], [7,1]]
-
-# c count_graphs 4
-edges_c = [[1, 2], [2, 3], [3, 1], [4, 5], [5, 6], [7, 8], [9, 8], [10,10]]
-
-group_a = Graph.new(edges_a)
-puts "Number of grahps for group a is " + group_a.count_graphs.to_s
-
-group_b = Graph.new(edges_b)
-puts "Number of grahps for group b is " + group_b.count_graphs.to_s
-
-group_c = Graph.new(edges_c)
-puts "Number of grahps for group c is " + group_c.count_graphs.to_s
-
-puts
-group_a.print_nodes
-
-puts
-group_b.print_nodes
-
-puts 
-group_c.print_nodes
-
-puts
-puts "interceptions for group a"
-p group_a.intersections
-
-puts "interceptions for group b"
-p group_b.intersections
-
-puts "interceptions for group c"
-p group_c.intersections
+# puts
+# # c count_graphs 4
+# edges_c = [[1, 2], [2, 3], [3, 1], [4, 5], [5, 6], [7, 8], [9, 8], [10,10]]
+# group_c = Graph.new(edges_c)
+# puts "Number of grahps for group C is " + group_c.count_graphs.to_s
+# puts 
+# group_c.print_nodes
+# puts
+# puts
+# puts "interceptions for group C"
+# p group_c.intersections
 
 
 
