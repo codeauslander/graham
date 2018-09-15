@@ -8,10 +8,10 @@ class CountGraphsTest < Minitest::Test
         assert_equal 2, number_of_graphs
     end
 
-    def test_example_with_2_5_connection
+    def test_example_with_2_5_edge
         edges = [[1, 2], [2, 3], [3, 1], [4, 5]]
         graphs = Graph.new(edges)
-        graphs.add_edge(2,5)
+        graphs.add_new_edge(2,5)
         number_of_graphs = graphs.count_graphs
         assert_equal 1, number_of_graphs
     end
@@ -23,10 +23,11 @@ class CountGraphsTest < Minitest::Test
         assert_equal 4, number_of_graphs
     end
 
-    def test_with_four_graphs
+    def test_with_four_graphs_plus_one
         edges = [[1, 2], [2, 3], [3, 1], [4, 5], [5, 6], [7, 8], [9, 8], [10,10]]
         graphs = Graph.new(edges)
+        graphs.add_new_edge(11,17)
         number_of_graphs = graphs.count_graphs
-        assert_equal 4, number_of_graphs
+        assert_equal 5, number_of_graphs
     end
 end

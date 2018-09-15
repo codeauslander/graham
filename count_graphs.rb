@@ -21,24 +21,30 @@ class Graph
         end
     end
 
+    def create_node(vertex)
+      @nodes.select { |node| vertex === node.number}[0] || Node.new(vertex)
+    end
+
     def add_node(edge)
-        start_node = @nodes.select { |node| edge[0] === node.number}[0] || Node.new(edge[0])
-        end_node = @nodes.select { |node| edge[1] === node.number}[0] || Node.new(edge[1])
+        start_node = create_node(edge[0])
+        end_node = create_node(edge[1])
 
-        end_node.connections << start_node unless end_node.connections.detect { |node| start_node.number === node.number}
-        end_node.connections << end_node unless end_node.connections.detect { |node| end_node.number === node.number}
+        add_connection(end_node, start_node)
+        add_connection(end_node, end_node)
 
-        start_node.connections << end_node unless start_node.connections.detect { |node| end_node.number === node.number}
-        start_node.connections << start_node unless start_node.connections.detect { |node| start_node.number === node.number}
+        add_connection(start_node, end_node)
+        add_connection(start_node, start_node)
         
         @nodes << start_node unless @nodes.detect { |node| edge[0] === node.number}
         @nodes << end_node unless @nodes.detect { |node| edge[1] === node.number}
     end
 
-    def add_edge(start_edge, end_edge)
-        edge = [start_edge, end_edge]
-        @edges << [edge]
-        add_node(edge)
+    def add_connection(node, new_node)
+      node.connections << new_node unless detect_node(node.connections, new_node)
+    end
+
+    def detect_node(connections, new_node)
+      connections.detect { |node| new_node.number === node.number}
     end
 
     def intersections
@@ -65,6 +71,12 @@ class Graph
 
     def count_graphs
         intersections.length
+    end
+
+    def add_new_edge(start_edge, end_edge)
+        edge = [start_edge, end_edge]
+        @edges << [edge]
+        add_node(edge)
     end
 
     def print_nodes
