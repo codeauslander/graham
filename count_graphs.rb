@@ -1,5 +1,6 @@
 class Node
-    attr_accessor :number, :connections
+    attr_accessor :connections
+    attr_reader :number
     def initialize(number)
         @number = number
         @connections = []
@@ -7,7 +8,6 @@ class Node
 end
 
 class Graph
-    attr_accessor :nodes, :edges
     def initialize(edges)
         raise 'At least one edge is necessary' unless edges[0]
         @edges = edges
@@ -84,7 +84,6 @@ class Graph
             p "Node - #{node.number} | connections: #{node.connections.map{|node| node.number}} "
         end
     end
-
 end
 
 # puts
