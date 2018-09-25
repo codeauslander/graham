@@ -35,8 +35,8 @@ class Graph
         add_connection(start_node, end_node)
         add_connection(start_node, start_node)
         
-        @nodes << start_node unless @nodes.detect { |node| edge[0] === node.number}
-        @nodes << end_node unless @nodes.detect { |node| edge[1] === node.number}
+        @nodes << start_node unless @nodes.detect { |node| start_node.number === node.number}
+        @nodes << end_node unless @nodes.detect { |node| end_node.number === node.number}
     end
 
     def add_connection(node, new_node)
